@@ -1,0 +1,62 @@
+{
+    "name": "ultimate-zip",
+    "version": "1.0.0",
+    "description": "Unzip and zip with ease!",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rimraf build && rimraf bundle",
+        "lint": "eslint src",
+        "compile": "babel src -d build",
+        "bundle": "browserify build/index.js -o bundle/index.js",
+        "test": "jest",
+        "unit": "jest -t unit",
+        "integration": "jest -t integration",
+        "coverage": "jest --coverage",
+        "debug": "babel-node --inspect=9001 tests/integration/debug.js",
+        "prepublishOnly": "npm run clean && npm run lint && npm run compile && npm run bundle"
+    },
+    "keywords": [
+        "archive",
+        "zip",
+        "unzip",
+        "compress",
+        "extract",
+        "deflate",
+        "inflate"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/steelgrave/ultimate-zip.git"
+    },
+    "bugs": {
+        "url": "https://github.com/steelgrave/ultimate-zip/issues",
+        "email": "leonwbrg@gmail.com"
+    },
+    "files": [
+        "build/"
+    ],
+    "homepage": "https://github.com/steelgrave/ultimate-zip/blob/master/README.md",
+    "author": {
+        "name": "Leonid Weinberg",
+        "email": "leonwbrg@gmail.com",
+        "url": "https://www.linkedin.com/in/leonid-weinberg-a45964143/"
+    },
+    "license": "MIT",
+    "dependencies": {},
+    "devDependencies": {
+        "@babel/cli": "^7.5.5",
+        "@babel/core": "^7.5.5",
+        "@babel/node": "^7.5.5",
+        "@babel/plugin-proposal-class-properties": "^7.5.5",
+        "@babel/preset-env": "^7.5.5",
+        "babel-eslint": "^10.0.2",
+        "browserify": "^16.5.0",
+        "eslint": "^5.5.0",
+        "eslint-plugin-babel": "^5.3.0",
+        "jest": "^24.1.0",
+        "rimraf": "^3.0.0"
+    },
+    "engines": {
+        "node": ">=6"
+    }
+}
