@@ -1,9 +1,9 @@
-import fs from 'fs'
-
+import NoZip from './../../src/index'
 
 (async () => {
 
-    const keke = fs.mkdir
+    const nozip = new NoZip('C:\\Users\\Leon\\nozip\\keke.zip.zip')
+    nozip.extractSync()
     debugger
     debugger
     debugger
