@@ -32,23 +32,51 @@ export const readZip32Record = (buffer, fileSize) => {
     }
 }
 
-const readFileHeaders = (buffer) => {
+import {CEN_HDR} from './constants'
+import {CEN_MTD} from './constants'
+import {CEN_CRC} from './constants'
+import {CEN_SIC} from './constants'
+import {CEN_SIU} from './constants'
+import {CEN_FLE} from './constants'
+import {CEN_ELE} from './constants'
+import {CEN_CLE} from './constants'
+import {CEN_ATX} from './constants'
+import {CEN_OFF} from './constants'
 
-    const headers = []
+export const readCentralFileHeader = (buffer) => {
 
-    while (CEN_HDR < buffer.length) {
+    const header = {}
+    header.checksum = buffer.readUInt32LE(CEN_CRC)
+    header.method = buffer.readUInt16LE(CEN_MTD)
+    header.inflatedSize = buffer.readUInt32LE(CEN_SIU)
+    header.deflatedSize = buffer.readUInt32LE(CEN_SIC)
+    header.externalFileAttrs = buffer.readUInt32LE(CEN_ATX)
+    header.localOffset = buffer.readUInt32LE(CEN_OFF)
 
-        const length = calculateHeaderLength(buffer, CEN_INCONSTANT_OFFSET, CEN_HDR)
+    const nameLen = buffer.readUInt16LE(CEN_FLE)
+    const extraLen = buffer.readUInt16LE(CEN_ELE)
+    const commentLen = buffer.readUInt16LE(CEN_CLE)
 
-        const signature = buffer.readUInt32LE(0)
-        verifySignature(signature, CEN_SIG, 'cen dir sig err')
+    header.fileName = buffer.toString('utf8', CEN_HDR, CEN_HDR + nameLen)
+    header.length = CEN_HDR + nameLen + extraLen + commentLen
 
-        const headerBuffer = buffer.slice(0, length)
-        const header = cenDecoder(headerBuffer, 0)
-        headers.push(header)
+    const extraBuf = Buffer.alloc(extraLen)
+    buffer.copy(extraBuf, 0, CEN_HDR + nameLen, CEN_HDR + nameLen + extraLen)
 
-        buffer = buffer.slice(length)
-    }
+    return header
+}
 
-    return headers
+import {LOC_HDR} from './constants'
+import {LOC_FLE} from './constants'
+import {LOC_ELE} from './constants'
+
+export const readLocalFileHeader = (buffer) => {
+
+    const nameLen = buffer.readUInt16LE(LOC_FLE)
+    const extraLen = buffer.readUInt16LE(LOC_ELE)
+    
+    const header = {}
+    header.length = LOC_HDR + nameLen + extraLen
+
+    return header
 }

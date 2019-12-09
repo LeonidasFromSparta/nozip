@@ -1,6 +1,18 @@
-import {sync} from './fs-compat'
+import fs from 'fs'
 
-export const fileSize = (fd) => {
+const fileSize = (fd) => {
 
-    return sync.fstatSync(fd).size
+    return fs.fstatSync(fd).size
+}
+
+const readSync = (fd, pos, len) => {
+
+    const buff = Buffer.alloc(len)
+    fs.readSync(fd, buff, 0, len, pos)
+    return buff
+}
+
+export default {
+    fileSize,
+    readSync
 }

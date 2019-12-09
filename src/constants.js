@@ -36,7 +36,11 @@ export const E64_CDS = 40 // central directories size
 export const E64_OFF = 48 // central directories offset to starting disk
 export const E64_HDR = 56
 
+/**
+ * Central directory header signature
+ */
 export const CEN_SIG = 0x02014B50
+
 export const CEN_SPO = 0
 export const CEN_VEM = 4
 export const CEN_PLM = 5
@@ -56,7 +60,12 @@ export const CEN_DSK = 34
 export const CEN_ATT = 36
 export const CEN_ATX = 38
 export const CEN_OFF = 42
+
+/**
+ * Central directory header fixed length
+ */
 export const CEN_HDR = 46
+
 export const CEN_MAX = CEN_HDR + 0xFFFF + 0xFFFF + 0xFFFF
 
 export const LOC_SIG = 0x04034B50
@@ -72,7 +81,12 @@ export const LOC_SIC = 18
 export const LOC_SIU = 22
 export const LOC_FLE = 26
 export const LOC_ELE = 28
+
+/**
+ * Local file header fixed length
+ */
 export const LOC_HDR = 30
+
 export const LOC_MAX = LOC_HDR + 0xFFFF + 0xFFFF
 
 export const ZIP_32 = 32

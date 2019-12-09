@@ -1,4 +1,6 @@
-import {extractArchiveSync, getEntriesSync} from './lib/arch-sync'
+import fs from 'fs'
+import {getEntriesSync} from './lib/sync'
+import {extractSync} from './lib/extract-sync'
 
 export default class NoZip {
 
@@ -7,19 +9,15 @@ export default class NoZip {
         this.path = path
     }
 
-    extractSync = () => {
+    extractSync = (where) => {
+
+        const fd = fs.openSync(this.path)
 
         debugger
-        
-        this.getEntriesSync()
-        extractArchiveSync(this.file, this.entries, path)
-    }
 
-    getEntriesSync = () => {
-
-        if (!this.entries)
-            this.entries = getEntriesSync(this.path)
-
-        return this.entries
+        for (const entry of getEntriesSync(fd))
+            extractSync(fd, entry, where)
+    
+        fs.closeSync(fd)
     }
 }
