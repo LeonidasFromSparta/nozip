@@ -4,7 +4,7 @@ import zipExtra from './../zip-extra'
 import fsExtra from './../fs-extra'
 import {readLocalFileHeader} from './../headers'
 import {calcCRC32} from './../crc32'
-import {inflaterSync} from './inflater'
+import {inflateSync} from './../zlib-extra'
 import {
     LOC_HDR
 } from './../constants'
@@ -23,12 +23,12 @@ export const extractSync = (fd, entry, where) => {
     
     const content = !zipExtra.isDeflated(entry) ?
         fsExtra.readSync(fd, entry.localOffset + locHeader.length, entry.deflatedSize) :
-        inflaterSync(fsExtra.readSync(fd, entry.localOffset + locHeader.length, entry.deflatedSize))
+        inflateSync(fsExtra.readSync(fd, entry.localOffset + locHeader.length, entry.deflatedSize))
 
     const crc32 = calcCRC32(content)
 
     if (crc32 !== entry.checksum)
         throw ('crc error')
 
-    return fs.writeFileSync(name, content)
+    fs.writeFileSync(name, content)
 }

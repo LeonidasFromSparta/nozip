@@ -1,5 +1,3 @@
-import {Transform} from 'stream'
-
 const table = [
 
     0x00000000, 0x77073096, 0xee0e612c, 0x990951ba, 0x076dc419, 0x706af48f, 0xe963a535, 0x9e6495a3,
@@ -39,33 +37,4 @@ const table = [
 export const calcCRC32 = (bytes) => {
 
     return (bytes.reduce((crc, byte) => (crc >>> 8) ^ table[(crc ^ byte) & 0xFF], -1)  ^ (-1)) >>> 0
-}
-
-export class CRC32 {
-
-    _crc = -1
-
-    update = (bytes) => {
-
-        for (const byte of bytes)
-            this._crc = (this._crc >>> 8) ^ table[(this._crc ^ byte) & 0xFF]
-
-        return this
-    }
-
-    getValue = () => (this._crc ^ (-1)) >>> 0
-}
-
-export class CRC32Stream extends Transform {
-
-    _crc32 = new CRC32()
-
-    _transform(chunk, encoding, callback) {
-
-        this._crc32.update(chunk)
-        this.push(chunk)
-        callback()
-    }
-
-    getValue = () => this._crc32.getValue()
 }
