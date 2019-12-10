@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import zipExtra from './../zip-extra'
+import {isDirectory, isEmpty, isDeflated} from './../zip-extra'
 import fsExtra from './../fs-extra'
 import {readLocalFileHeader} from './../headers'
 import {calcCRC32} from './../crc32'
@@ -13,15 +13,15 @@ export const extractSync = (fd, entry, where) => {
 
     const name = path.join(where, entry.fileName)
 
-    if (zipExtra.isDirectory(entry))
+    if (isDirectory(entry))
         return fs.mkdirSync(name)
 
-    if (zipExtra.isEmpty(entry))
+    if (isEmpty(entry))
         return fs.writeFileSync(name, Buffer.alloc(0))
 
     const locHeader = readLocalFileHeader(fsExtra.readSync(fd, entry.localOffset, LOC_HDR))
-    
-    const content = !zipExtra.isDeflated(entry) ?
+
+    const content = !isDeflated(entry) ?
         fsExtra.readSync(fd, entry.localOffset + locHeader.length, entry.deflatedSize) :
         inflateSync(fsExtra.readSync(fd, entry.localOffset + locHeader.length, entry.deflatedSize))
 
