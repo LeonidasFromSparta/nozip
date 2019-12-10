@@ -1,3 +1,7 @@
-import {inflateRawSync} from 'zlib'
+import zlib from 'zlib'
+import util from 'util'
 
-export const inflateSync = (deflated) => inflateRawSync(deflated)
+export default {
+    inflate: util.promisify(zlib.inflateRaw),
+    inflateSync: zlib.inflateRawSync
+}

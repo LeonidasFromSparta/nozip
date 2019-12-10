@@ -17,7 +17,7 @@ export const readZip32Record = (buffer, fileSize) => {
         for (let offset = buffer.length - (END_HDR - 4); offset !== -1; offset--)
             if (buffer.readUInt32LE(offset) === END_SIG)
                 return offset
-    
+
         throw (`Zip32 end of central directory record signature could not be found`)
     }
 
@@ -74,7 +74,7 @@ export const readLocalFileHeader = (buffer) => {
 
     const nameLen = buffer.readUInt16LE(LOC_FLE)
     const extraLen = buffer.readUInt16LE(LOC_ELE)
-    
+
     const header = {}
     header.length = LOC_HDR + nameLen + extraLen
 

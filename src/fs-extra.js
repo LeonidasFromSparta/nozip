@@ -1,9 +1,12 @@
 import fs from 'fs'
-import path from 'path'
+import util from 'util'
 
-const fileSize = (fd) => {
+const fileSize = async (fd) => (await util.promisify(fs.fstat)(fd)).size
+const fileSizeSync = (fd) => fs.fstatSync(fd).size
 
-    return fs.fstatSync(fd).size
+const read = async (fd, pos, len) => {
+
+    return (await util.promisify(fs.read)(fd, Buffer.alloc(len), 0, len, pos)).buffer
 }
 
 const readSync = (fd, pos, len) => {
@@ -15,5 +18,15 @@ const readSync = (fd, pos, len) => {
 
 export default {
     fileSize,
-    readSync
+    fileSizeSync,
+    read,
+    readSync,
+    open: util.promisify(fs.open),
+    openSync: fs.openSync,
+    close: util.promisify(fs.close),
+    closeSync: fs.closeSync,
+    writeFile: util.promisify(fs.writeFile),
+    writeFileSync: fs.writeFileSync,
+    mkdir: util.promisify(fs.mkdir),
+    mkdirSync: fs.mkdirSync
 }

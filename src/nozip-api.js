@@ -1,6 +1,6 @@
-import fs from 'fs'
-import {getEntriesSync} from './lib/sync'
-import {extractSync} from './lib/extract-sync'
+import fse from './fs-extra'
+import {getZipEntriesSync, getZipEntries} from './entry'
+import {extractSync, extract} from './extract'
 import {normalize} from 'path'
 
 export default class NoZip {
@@ -16,11 +16,25 @@ export default class NoZip {
 
         where = normalize(where)
 
-        const fd = fs.openSync(this.path)
+        const fd = fse.openSync(this.path, 'r')
 
-        for (const entry of getEntriesSync(fd))
+        for (const entry of getZipEntriesSync(fd))
             extractSync(fd, entry, where)
 
-        fs.closeSync(fd)
+        fse.closeSync(fd)
+    }
+
+    extract = async (where) => {
+
+        debugger
+
+        where = normalize(where)
+
+        const fd = await fse.open(this.path, 'r')
+
+        for (const zipEntry of await getZipEntries(fd))
+            await extract(fd, zipEntry, where)
+
+        await fse.close(fd)
     }
 }

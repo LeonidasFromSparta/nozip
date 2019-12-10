@@ -15,12 +15,12 @@ afterEach(() => {
     rimraf.sync(EXTRACT_PATH)
 })
 
-test('integration test should assert extract archive - sync api', () => {
+test('should assert extract archive - sync api', () => {
 
     new NoZip(ASSETS_PATH + '/algorithms/win-7z-64w.zip').extractSync(EXTRACT_PATH)
 })
 
-test('integration test should assert extract archive - promise api', async () => {
+test('should assert extract archive - promise api', async () => {
 
-    await new NoZip(ASSETS_PATH + '/algorithms/win-7z-64w.zip').extract(EXTRACT_PATH + '/zip/promise')
+    await new NoZip(ASSETS_PATH + '/algorithms/win-7z-64w.zip').extract(EXTRACT_PATH)
 })
