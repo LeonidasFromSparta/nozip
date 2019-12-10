@@ -37,7 +37,7 @@ export const E64_OFF = 48 // central directories offset to starting disk
 export const E64_HDR = 56
 
 /**
- * Central directory header signature
+ * Central file header signature
  */
 export const CEN_SIG = 0x02014B50
 
@@ -68,7 +68,11 @@ export const CEN_HDR = 46
 
 export const CEN_MAX = CEN_HDR + 0xFFFF + 0xFFFF + 0xFFFF
 
+/**
+ * Local file header signature
+ */
 export const LOC_SIG = 0x04034B50
+
 export const LOC_SPO = 0
 export const LOC_VER = 4
 export const LOC_PLT = 5

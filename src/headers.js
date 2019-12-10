@@ -18,7 +18,7 @@ export const readZip32Record = (buffer, fileSize) => {
             if (buffer.readUInt32LE(offset) === END_SIG)
                 return offset
 
-        throw (`Zip32 end of central directory record signature could not be found`)
+        throw ('Zip32 end of central directory record signature could not be found')
     }
 
     const offset = findZip32Offset(buffer)
@@ -32,6 +32,7 @@ export const readZip32Record = (buffer, fileSize) => {
     }
 }
 
+import {CEN_SIG} from './constants'
 import {CEN_HDR} from './constants'
 import {CEN_MTD} from './constants'
 import {CEN_CRC} from './constants'
@@ -44,6 +45,9 @@ import {CEN_ATX} from './constants'
 import {CEN_OFF} from './constants'
 
 export const readCentralFileHeader = (buffer) => {
+
+    if (buffer.readUInt32LE(0) !== CEN_SIG)
+        throw new Error('Bad central file header signature')
 
     const header = {}
     header.checksum = buffer.readUInt32LE(CEN_CRC)
@@ -66,11 +70,15 @@ export const readCentralFileHeader = (buffer) => {
     return header
 }
 
+import {LOC_SIG} from './constants'
 import {LOC_HDR} from './constants'
 import {LOC_FLE} from './constants'
 import {LOC_ELE} from './constants'
 
 export const readLocalFileHeader = (buffer) => {
+
+    if (buffer.readUInt32LE(0) !== LOC_SIG)
+        throw new Error('Bad local file header signature')
 
     const nameLen = buffer.readUInt16LE(LOC_FLE)
     const extraLen = buffer.readUInt16LE(LOC_ELE)

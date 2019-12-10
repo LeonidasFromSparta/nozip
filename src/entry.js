@@ -3,13 +3,12 @@ import {readZip32Record, readCentralFileHeader} from './headers'
 import {
     END_MAX,
     CEN_HDR,
-    CEN_SIG,
     CEN_INCONSTANT_OFFSET
 } from './constants'
 
 export const getZipEntriesSync = (fd) => {
 
-    const fileSize = fse.fileSize(fd)
+    const fileSize = fse.fileSizeSync(fd)
 
     const header32Pos = (fileSize - END_MAX) < 0 ? 0 : fileSize - END_MAX
     const header32 = readZip32Record(fse.readSync(fd, header32Pos, END_MAX), fileSize)
@@ -21,11 +20,6 @@ export const getZipEntriesSync = (fd) => {
     const headers = []
 
     while (CEN_HDR < buffer.length) {
-
-        const signature = buffer.readUInt32LE(0)
-
-        if (signature !== CEN_SIG)
-            throw new Error('cen dir sig err')
 
         const length = CEN_INCONSTANT_OFFSET.reduce((acc, pos) => acc + buffer.readUInt16LE(pos), CEN_HDR)
 
@@ -53,11 +47,6 @@ export const getZipEntries = async (fd) => {
     const headers = []
 
     while (CEN_HDR < buffer.length) {
-
-        const signature = buffer.readUInt32LE(0)
-
-        if (signature !== CEN_SIG)
-            throw new Error('cen dir sig err')
 
         const length = CEN_INCONSTANT_OFFSET.reduce((acc, pos) => acc + buffer.readUInt16LE(pos), CEN_HDR)
 

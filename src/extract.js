@@ -31,10 +31,7 @@ export const extractSync = (fd, entry, where) => {
     }
 
     const content = getContent()
-    const crc32 = calcCRC32(content)
-
-    if (crc32 !== entry.checksum)
-        throw ('crc error')
+    checkCRC(content, entry.checksum)
 
     fse.writeFileSync(name, content)
 }
@@ -62,10 +59,13 @@ export const extract = async (fd, entry, where) => {
     }
 
     const content = await getContent()
-    const crc32 = calcCRC32(content)
-
-    if (crc32 !== entry.checksum)
-        throw ('crc error')
+    checkCRC(content, entry.checksum)
 
     await fse.writeFile(name, content)
+}
+
+const checkCRC = (content, crc32) => {
+
+    if (calcCRC32(content) !== crc32)
+        throw ('Bad file checksum')
 }

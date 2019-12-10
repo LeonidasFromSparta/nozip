@@ -18,8 +18,8 @@ export default class NoZip {
 
         const fd = fse.openSync(this.path, 'r')
 
-        for (const entry of getZipEntriesSync(fd))
-            extractSync(fd, entry, where)
+        for (const zipEntry of getZipEntriesSync(fd))
+            extractSync(fd, zipEntry, where)
 
         fse.closeSync(fd)
     }
