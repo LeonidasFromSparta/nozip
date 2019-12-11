@@ -9,9 +9,9 @@ module.exports = {
     plugins: ['babel'],
     extends: ['eslint:recommended'],
     rules: {
-        'semi': [2, 'never'],
-        'no-console': 'off',
-        'no-debugger': 'off',
+        'semi': ['error', 'never'],
+        'no-console': 'error',
+        'no-debugger': 'error',
         'max-len': [2, 120, 4],
         'no-empty': ['error', { allowEmptyCatch: true }]
     }

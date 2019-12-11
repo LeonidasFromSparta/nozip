@@ -1,19 +1,17 @@
 {
-    "name": "ultimate-zip",
+    "name": "nozip",
     "version": "1.0.0",
-    "description": "Unzip and zip with ease!",
+    "description": "Unzip and Zip with ease!",
     "main": "index.js",
     "scripts": {
-        "clean": "rimraf build && rimraf bundle",
+        "clean": "rimraf build && rimraf bundle && rimraf min",
         "lint": "eslint src",
         "compile": "babel src -d build",
         "bundle": "browserify build/index.js -o bundle/index.js",
+        "min": "npx mkdirp min && terser bundle/index.js -c -m -o min/nozip.min.js",
+        "prepublishOnly": "npm run clean && npm run lint && npm run compile && npm run bundle && npm run min",
         "test": "jest",
-        "unit": "jest -t unit",
-        "integration": "jest -t integration",
-        "coverage": "jest --coverage",
-        "debug": "babel-node --inspect=9001 tests/integration/debug.js",
-        "prepublishOnly": "npm run clean && npm run lint && npm run compile && npm run bundle"
+        "debug": "babel-node --inspect=9001 tests/debug.js"
     },
     "keywords": [
         "archive",
@@ -26,14 +24,14 @@
     ],
     "repository": {
         "type": "git",
-        "url": "https://github.com/steelgrave/ultimate-zip.git"
+        "url": "https://github.com/steelgrave/nozip.git"
     },
     "bugs": {
-        "url": "https://github.com/steelgrave/ultimate-zip/issues",
+        "url": "https://github.com/steelgrave/nozip/issues",
         "email": "leonwbrg@gmail.com"
     },
     "files": [
-        "build/"
+        "min/"
     ],
     "homepage": "https://github.com/steelgrave/ultimate-zip/blob/master/README.md",
     "author": {
@@ -48,15 +46,16 @@
         "@babel/core": "^7.5.5",
         "@babel/node": "^7.5.5",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
-        "@babel/preset-env": "^7.5.5",
+        "@babel/preset-env": "^7.7.6",
         "babel-eslint": "^10.0.2",
         "browserify": "^16.5.0",
         "eslint": "^5.5.0",
         "eslint-plugin-babel": "^5.3.0",
         "jest": "^24.1.0",
-        "rimraf": "^3.0.0"
+        "rimraf": "^3.0.0",
+        "terser": "^4.4.2"
     },
     "engines": {
-        "node": ">=6"
+        "node": ">=8"
     }
 }

@@ -4,10 +4,7 @@ import {
     END_CDC,
     END_CDS,
     END_OFF,
-    END_ZCL,
-    ELO_SPO,
-    ELO_SIG,
-    ELO_OFF
+    END_ZCL
 } from './constants'
 
 export const readZip32Record = (buffer, fileSize) => {
@@ -35,7 +32,6 @@ export const readZip32Record = (buffer, fileSize) => {
 import {CEN_SIG} from './constants'
 import {CEN_HDR} from './constants'
 import {CEN_MTD} from './constants'
-import {CEN_CRC} from './constants'
 import {CEN_SIC} from './constants'
 import {CEN_SIU} from './constants'
 import {CEN_FLE} from './constants'

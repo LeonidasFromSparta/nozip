@@ -7,8 +7,6 @@ export default class NoZip {
 
     constructor(path) {
 
-        debugger
-
         this.path = path
     }
 
