@@ -23,15 +23,11 @@ export const extractSync = (fd, entry, where) => {
     const getContent = () => {
 
         const buffer = fse.readSync(fd, entry.localOffset + locHeader.length, entry.deflatedSize)
-
-        if (zipe.isDeflated(entry))
-            return zlibe.inflateSync(buffer)
-
-        return buffer
+        return zipe.isDeflated(entry) ? zlibe.inflateSync(buffer) : buffer
     }
 
     const content = getContent()
-    checkCRC(content, entry.checksum)
+    checkCRC(content, locHeader.checksum)
 
     fse.writeFileSync(name, content)
 }
@@ -51,15 +47,11 @@ export const extract = async (fd, entry, where) => {
     const getContent = async () => {
 
         const buffer = await fse.read(fd, entry.localOffset + locHeader.length, entry.deflatedSize)
-
-        if (zipe.isDeflated(entry))
-            return await zlibe.inflate(buffer)
-
-        return buffer
+        return zipe.isDeflated(entry) ? await zlibe.inflate(buffer) : buffer
     }
 
     const content = await getContent()
-    checkCRC(content, entry.checksum)
+    checkCRC(content, locHeader.checksum)
 
     await fse.writeFile(name, content)
 }

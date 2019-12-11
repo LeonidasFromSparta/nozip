@@ -50,7 +50,12 @@ export const CEN_FLG = 8
 export const CEN_MTD = 10
 export const CEN_TIM = 12
 export const CEN_DAT = 14
+
+/**
+ * Central file header checksum
+ */
 export const CEN_CRC = 16
+
 export const CEN_SIC = 20
 export const CEN_SIU = 24
 export const CEN_FLE = 28
@@ -80,7 +85,12 @@ export const LOC_FLG = 6
 export const LOC_MTD = 8
 export const LOC_TIM = 10
 export const LOC_DAT = 12
+
+/**
+ * Local file header checksum
+ */
 export const LOC_CRC = 14
+
 export const LOC_SIC = 18
 export const LOC_SIU = 22
 export const LOC_FLE = 26

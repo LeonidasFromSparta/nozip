@@ -50,7 +50,6 @@ export const readCentralFileHeader = (buffer) => {
         throw new Error('Bad central file header signature')
 
     const header = {}
-    header.checksum = buffer.readUInt32LE(CEN_CRC)
     header.method = buffer.readUInt16LE(CEN_MTD)
     header.inflatedSize = buffer.readUInt32LE(CEN_SIU)
     header.deflatedSize = buffer.readUInt32LE(CEN_SIC)
@@ -74,6 +73,7 @@ import {LOC_SIG} from './constants'
 import {LOC_HDR} from './constants'
 import {LOC_FLE} from './constants'
 import {LOC_ELE} from './constants'
+import {LOC_CRC} from './constants'
 
 export const readLocalFileHeader = (buffer) => {
 
@@ -84,6 +84,7 @@ export const readLocalFileHeader = (buffer) => {
     const extraLen = buffer.readUInt16LE(LOC_ELE)
 
     const header = {}
+    header.checksum = buffer.readUInt32LE(LOC_CRC)
     header.length = LOC_HDR + nameLen + extraLen
 
     return header
