@@ -7,12 +7,12 @@ export default class NoZip {
 
     constructor(path) {
 
+        debugger
+
         this.path = path
     }
 
     extractSync = (where) => {
-
-        debugger
 
         where = normalize(where)
 
@@ -24,16 +24,14 @@ export default class NoZip {
         fse.closeSync(fd)
     }
 
-    extract = async (where) => {
-
-        debugger
+    extract = async (where, bufferLimit = 65536) => {
 
         where = normalize(where)
 
         const fd = await fse.open(this.path, 'r')
 
         for (const zipEntry of await getZipEntries(fd))
-            await extract(fd, zipEntry, where)
+            await extract(fd, zipEntry, where, bufferLimit)
 
         await fse.close(fd)
     }

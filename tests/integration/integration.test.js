@@ -25,6 +25,11 @@ test('should assert extract archive - promise api', async () => {
     await new NoZip(ASSETS_PATH + '/algorithms/win-7z-64w.zip').extract(EXTRACT_PATH)
 })
 
+test('should assert extract archive - promise api (streams)', async () => {
+
+    await new NoZip(ASSETS_PATH + '/algorithms/win-7z-64w.zip').extract(EXTRACT_PATH, 0)
+})
+
 /*
     SIGNATURES
 */

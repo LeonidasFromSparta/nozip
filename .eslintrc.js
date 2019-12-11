@@ -12,6 +12,7 @@ module.exports = {
         'semi': [2, 'never'],
         'no-console': 'off',
         'no-debugger': 'off',
-        'max-len': [2, 120, 4]
+        'max-len': [2, 120, 4],
+        'no-empty': ['error', { allowEmptyCatch: true }]
     }
 }

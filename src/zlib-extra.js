@@ -3,5 +3,6 @@ import util from 'util'
 
 export default {
     inflate: util.promisify(zlib.inflateRaw),
-    inflateSync: zlib.inflateRawSync
+    inflateSync: zlib.inflateRawSync,
+    streamingInflate: zlib.createInflateRaw
 }

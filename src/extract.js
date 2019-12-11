@@ -12,8 +12,15 @@ export const extractSync = (fd, entry, where) => {
 
     const name = path.join(where, entry.fileName)
 
-    if (zipe.isDirectory(entry))
-        return fse.mkdirSync(name)
+    if (zipe.isDirectory(entry)) {
+
+        try {
+
+            fse.mkdirSync(name)
+        } catch (ex) {}
+
+        return
+    }
 
     if (zipe.isEmpty(entry))
         return fse.writeFileSync(name, Buffer.alloc(0))
@@ -32,28 +39,67 @@ export const extractSync = (fd, entry, where) => {
     fse.writeFileSync(name, content)
 }
 
-export const extract = async (fd, entry, where) => {
+export const extract = async (fd, entry, where, bufferLimit) => {
 
     const name = path.join(where, entry.fileName)
 
-    if (zipe.isDirectory(entry))
-        return await fse.mkdir(name)
+    if (zipe.isDirectory(entry)) {
+
+        try {
+
+            await fse.mkdir(name)
+        } catch (ex) {}
+
+        return
+    }
 
     if (zipe.isEmpty(entry))
         return await fse.writeFile(name, Buffer.alloc(0))
 
     const locHeader = readLocalFileHeader(await fse.read(fd, entry.localOffset, LOC_HDR))
 
-    const getContent = async () => {
+    const buffered = async () => {
 
-        const buffer = await fse.read(fd, entry.localOffset + locHeader.length, entry.deflatedSize)
-        return zipe.isDeflated(entry) ? await zlibe.inflate(buffer) : buffer
+        const getContent = async () => {
+
+            const buffer = await fse.read(fd, entry.localOffset + locHeader.length, entry.deflatedSize)
+            return zipe.isDeflated(entry) ? await zlibe.inflate(buffer) : buffer
+        }
+
+        const content = await getContent()
+        checkCRC(content, locHeader.checksum)
+
+        await fse.writeFile(name, content)
     }
 
-    const content = await getContent()
-    checkCRC(content, locHeader.checksum)
+    const streaming = async () => {
 
-    await fse.writeFile(name, content)
+        const contentStream = fse.createReadStream(fd, entry.localOffset + locHeader.length, entry.deflatedSize)
+
+        if (zipe.isDeflated(entry)) {
+
+            return await new Promise((resolve, reject) => {
+
+                const pipe = contentStream.pipe(zlibe.streamingInflate()).pipe(fse.createWriteStream(name))
+
+                pipe.on('finish', resolve)
+                pipe.on('error', reject)
+            })
+        }
+
+        await new Promise((resolve, reject) => {
+
+            const pipe = contentStream.pipe(fse.createWriteStream(name))
+
+            pipe.on('finish', resolve)
+            pipe.on('error', reject)
+        })
+    }
+
+    if (entry.deflatedSize > bufferLimit)
+        return await streaming()
+
+    await buffered()
 }
 
 const checkCRC = (content, crc32) => {
